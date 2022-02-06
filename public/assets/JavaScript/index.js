@@ -23,7 +23,7 @@ async function login(){
     if (result.code === 202){
         sessionStorage.accesskey = result.accesskey;
         console.log('login valid');
-        window.location.replace("/chatroom");
+        window.location.replace("/home");
     }
     // An alert will pop up for 5 seconds if the server sends back a fail match
     else {

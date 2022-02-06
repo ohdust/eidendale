@@ -10,11 +10,10 @@ const messages = {
 
     getRoomMsgs: async function(roomId) {
         const result = await orm.directQuery(
-        `SELECT messages.room_id, users.avatar_dirct, users.display_name, messages.message_body 
+        `SELECT messages.room_id, users.avatar_dirct, users.display_name, messages.message_body
         FROM messages LEFT JOIN users ON users.id = user_id WHERE room_id = ${roomId};`);
         return result;
     },
-
     // add message output: { user, channel, msg }
     addMsgToRoom: async function(userId, roomId, msg) {
         const variableQuery = `(user_id, room_id, message_body)`;

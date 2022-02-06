@@ -10,14 +10,14 @@ VALUES ('guest2','guest2');
 
 
 -- For table: users
-INSERT INTO users (login_id, first_name, last_name, display_name, avatar_dirct)
-VALUES (1, 'Admin', 'Istrator', 'Adminstrator', 'wolf.png');
+INSERT INTO users (login_id, first_name, last_name, display_name, avatar_dirct, title)
+VALUES (1, 'Admin', 'Ashley', 'Marie', 'wolf.png', 'Professor');
 
-INSERT INTO users (login_id, first_name, last_name, display_name, avatar_dirct)
-VALUES (2, 'Guest', 'One', 'Guest 1', 'frog.png');
+INSERT INTO users (login_id, first_name, last_name, display_name, avatar_dirct, title)
+VALUES (2, 'Guest', 'One', 'Guest 1', 'frog.png', 'Professor');
 
-INSERT INTO users (login_id, first_name, last_name, display_name, avatar_dirct)
-VALUES (3, 'Guest', 'Two', 'Guest 2', 'pizza.png');
+INSERT INTO users (login_id, first_name, last_name, display_name, avatar_dirct, title)
+VALUES (3, 'Guest', 'Two', 'Guest 2', 'pizza.png', 'Professor');
 
 
 -- For table: messages
@@ -25,24 +25,14 @@ INSERT INTO messages (user_id, room_id, message_body)
 VALUES (1, 1, 'Hello everybody!');
 
 INSERT INTO messages (user_id, room_id, message_body)
-VALUES (2, 1, 'Hello Chang!');
+VALUES (2, 1, 'Hello Me!');
 
 INSERT INTO messages (user_id, room_id, message_body)
-VALUES (3, 1, 'Morning guys!');
+VALUES (3, 1, 'Hey guys!');
 
 INSERT INTO messages (user_id, room_id, message_body)
 VALUES (4, 1, 'Hey people, how is it going?');
 
-INSERT INTO messages (user_id, room_id, message_body)
-VALUES (1, 1, 'Good! We can start our project now!');
-
-
 -- For table: rooms
-INSERT INTO rooms (room_name)
-VALUES ('Main Room');
-
-INSERT INTO rooms (room_name)
-VALUES ('Coding');
-
-INSERT INTO rooms (room_name)
-VALUES ('Meeting');
+INSERT INTO rooms (id, room_name)
+VALUES (1, 'Main Room');

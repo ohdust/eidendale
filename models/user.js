@@ -8,9 +8,9 @@ const user = {
         return result;
     },
 
-    addNew: async function(loginID, firstName, lastName, displayName, avatarPNG) {
-        const vars = '(login_id, first_name, last_name, display_name, avatar_dirct)';
-        const data = `(${loginID}, '${firstName}', '${lastName}', '${displayName}', '${avatarPNG}')`;
+    addNew: async function(loginID, firstName, lastName, displayName, avatarPNG, title) {
+        const vars = '(login_id, first_name, last_name, display_name, avatar_dirct, title)';
+        const data = `(${loginID}, '${firstName}', '${lastName}', '${displayName}', '${avatarPNG}', '${title}')`;
         await orm.insertOne(this.name, vars, data);
     },
 
@@ -35,7 +35,7 @@ const user = {
     getUserInfo: async function(accesskey) {
         const result = await orm.findOne(
             'users LEFT JOIN login_info ON login_info.id = login_id',
-            'users.id, users.display_name, users.avatar_dirct',
+            'users.id, users.display_name, users.avatar_dirct, users.title',
             `login_info.user_name = \'${accesskey}\';`
         )
         return result[0];

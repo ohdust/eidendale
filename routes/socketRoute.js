@@ -3,6 +3,15 @@ var socketIO = function (io, socket, onlineUsers) {
   console.log('a user connected', socket.id);
   socket.on('connectToServer', (data) => { onlineUsers.push(data); });
 
+
+  //inactivity check
+  socket.on('inactivity', message => {
+    console.log("it begins");
+    clearTimeout(socket.inactivityTimeout);
+    console.log("We have entered the inactive stage");
+    socket.inactivityTimeout = setTimeout(() => socket.disconnect(true), 8000);
+  });
+
   // join rooms
   socket.on('join', (data) => {
     console.log(`user ${data.userId} has joined room ${data.roomId}`);
@@ -20,7 +29,7 @@ var socketIO = function (io, socket, onlineUsers) {
   // send/receive message
   socket.on('message', (data) => {
     console.log(`message from room ${data.roomId} - ${data.displayName}: ${data.msg}`);
-    io.to(data.roomId).emit('receivedMsg', { avatar:data.avatar, displayName:data.displayName, msg:data.msg });
+    io.to(data.roomId).emit('receivedMsg', { avatar:data.avatar, displayName:data.displayName, msg:data.msg});
   });
 
   // leave rooms
