@@ -4,6 +4,7 @@ const login = require('../models/login_info');
 const user = require('../models/user');
 const messages = require('../models/messages');
 const rooms = require('../models/rooms');
+const moment = require('moment');
 
 function routes(app, onlineUsers) {
     // access index
@@ -98,7 +99,7 @@ function routes(app, onlineUsers) {
     // add message to DB
     app.post('/api/messages', async (req, res) => {
         console.log(`POST REQUEST: adding message to DB ${req.body}`);
-        messages.addMsgToRoom(req.body.userId, req.body.roomId, req.body.msg);
+        messages.addMsgToRoom(req.body.userId, req.body.roomId, req.body.msg, req.body.time_sent);
         res.send({ message:'success' });
     })
 
@@ -126,5 +127,4 @@ function routes(app, onlineUsers) {
         res.send({ message: 'success' });
     })
 }
-
 module.exports = routes;

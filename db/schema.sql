@@ -28,6 +28,7 @@ CREATE TABLE messages (
   user_id INTEGER NOT NULL,
   room_id INTEGER NOT NULL,
   message_body VARCHAR(300),
+  time_sent VARCHAR(300),
   PRIMARY KEY(id)
 );
 

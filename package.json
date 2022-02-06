@@ -1,7 +1,7 @@
 {
-  "name": "project2-fullstack",
+  "name": "eidendale",
   "version": "0.1.0",
-  "description": "The group project 2 for coding bootcamp",
+  "description": "",
   "main": "server.js",
   "scripts": {
     "test": "mocha || exit 0",
@@ -10,18 +10,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Dragontalker/BootCamp_Project2.git"
+    "url": ""
   },
   "keywords": [],
-  "author": "Tong (Richard) Yang, Chang Xiao, Micheal Wong, Sam Kim",
+  "author": "Ashley",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Dragontalker/BootCamp_Project2/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/Dragontalker/BootCamp_Project2#readme",
+  "homepage": "",
   "devDependencies": {
     "chai": "^4.3.3",
-    "mocha": "^8.3.0",
+    "mocha": "^9.2.0",
     "nodemon": "^2.0.7",
     "supertest": "^6.1.3"
   },

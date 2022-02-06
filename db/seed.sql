@@ -21,17 +21,8 @@ VALUES (3, 'Guest', 'Two', 'Guest 2', 'pizza.png', 'Professor');
 
 
 -- For table: messages
-INSERT INTO messages (user_id, room_id, message_body)
-VALUES (1, 1, 'Hello everybody!');
-
-INSERT INTO messages (user_id, room_id, message_body)
-VALUES (2, 1, 'Hello Me!');
-
-INSERT INTO messages (user_id, room_id, message_body)
-VALUES (3, 1, 'Hey guys!');
-
-INSERT INTO messages (user_id, room_id, message_body)
-VALUES (4, 1, 'Hey people, how is it going?');
+INSERT INTO messages (user_id, room_id, message_body, time_sent)
+VALUES (1, 1, 'Hello everybody!', '0252522');
 
 -- For table: rooms
 INSERT INTO rooms (id, room_name)

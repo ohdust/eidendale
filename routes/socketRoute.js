@@ -1,7 +1,9 @@
 var socketIO = function (io, socket, onlineUsers) {
   // connect to server
   console.log('a user connected', socket.id);
-  socket.on('connectToServer', (data) => { onlineUsers.push(data); });
+  socket.on('connectToServer', (data) => {
+    onlineUsers.push(data);
+  });
 
 
   //inactivity check
@@ -28,8 +30,8 @@ var socketIO = function (io, socket, onlineUsers) {
 
   // send/receive message
   socket.on('message', (data) => {
-    console.log(`message from room ${data.roomId} - ${data.displayName}: ${data.msg}`);
-    io.to(data.roomId).emit('receivedMsg', { avatar:data.avatar, displayName:data.displayName, msg:data.msg});
+      console.log(`message from room ${data.roomId} - ${data.displayName}: ${data.msg} ${data.time_sent}`);
+    io.to(data.roomId).emit('receivedMsg', { avatar:data.avatar, displayName:data.displayName, msg:data.msg, time_sent:data.time_sent});
   });
 
   // leave rooms
