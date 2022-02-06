@@ -1,6 +1,8 @@
 const socket = io();
 let currentRoomId = null;
-let userInfo = { id: null, displayName: null, avatar: null, roomId: null, socketId: null };
+let time_sent = null;
+let local_time = null;
+let userInfo = { id: null, displayName: null, avatar: null, roomId: null, socketId: null, title: null };
 
 document.querySelector('#msgForm').addEventListener('submit', sendMsg);
 document.querySelector('#logoutBtn').addEventListener('click', logOut);
@@ -19,11 +21,12 @@ async function checkAccesskey() {
     // grab user info using accessKey
     const accesskey = window.sessionStorage.accesskey;
     // save user info
-    const { id, display_name, avatar_dirct } = await fetch(`/api/users/${accesskey}`).then(r => r.json());
+    const { id, display_name, avatar_dirct, title } = await fetch(`/api/users/${accesskey}`).then(r => r.json());
     userInfo.id = id;
     userInfo.displayName = display_name;
     userInfo.avatar = avatar_dirct;
     userInfo.socketId = socket.id;
+    userInfo.title = title;
     // send connected status to server
     socket.emit('connectToServer', userInfo);
 }
@@ -70,6 +73,7 @@ function hideMenu(event){
     }
 }
 
+//userList on side
 async function userList() {
     // TO-DO: load online users list (#userList)
     document.querySelector('#userList').innerHTML = '';
@@ -82,8 +86,10 @@ async function userList() {
         document.querySelector('#userList').innerHTML += `<li><img src="/assets/avatars/${users[i].avatar}" alt="avatar" height="25px" width="25px"/> ${users[i].displayName}</li>`;
         document.querySelector('#sbUserList').innerHTML += `<li>${users[i].displayName}</li>`;
     }
+    socket.emit('inactivity');
 }
 
+//loading previous messages
 async function prevMsgs(roomId) {
     // TO-DO: load previous messages
     document.querySelector('#msgList').innerHTML = '';
@@ -92,7 +98,7 @@ async function prevMsgs(roomId) {
         .catch(err => [{ display_name: 'Error', message_body: err }]);
     // print messages
     for (let i = 0; i < prev.length; i++) {
-        document.querySelector('#msgList').innerHTML += `<li><img src="/assets/avatars/${prev[i].avatar_dirct}" alt="avatar" height="25px" width="25px"/> ${prev[i].display_name}: ${prev[i].message_body}</li>`;
+        document.querySelector('#msgList').innerHTML += `<li><img src="/assets/avatars/${prev[i].avatar_dirct}" alt="avatar" height="25px" width="25px"/> ${prev[i].display_name}: ${prev[i].message_body} ${prev[i].time_sent}</li>`;
     }
     // scroll to bottom of message box
     document.querySelector('#msgList').scrollTop = document.querySelector('#msgList').scrollHeight;
@@ -109,6 +115,7 @@ async function joinRoom(room) {
     // join new room
     socket.emit('join', { roomId: room.id, userId: userInfo.id, socketId: socket.id });
     currentRoomId = room.id;
+    socket.emit('inactivity');
     // hide room overlay
     hideRoomOverlay();
     // print new room name
@@ -165,16 +172,26 @@ function hideRoomOverlay() {
 // send message to server
 async function sendMsg(e) {
     e.preventDefault();
+    const currTimestamp = Date.now(), utcDateString = (new Date(currTimestamp)).toUTCString();
+
+    const timeForUnix = new Date(utcDateString).getTime();
+    time_sent = timeForUnix;
+
+    const date = new Date();
+    const local = date.toLocaleTimeString();
+    local_time = local;
+
     const msg = document.querySelector('#msg').value;
+
     if (msg) {
-        socket.emit('message', { roomId: currentRoomId, avatar: userInfo.avatar, displayName: userInfo.displayName, msg: msg });
+        socket.emit('message', { roomId: currentRoomId, avatar: userInfo.avatar, displayName: userInfo.displayName, msg: msg, time_sent: time_sent});
         document.querySelector('#msg').value = '';
     }
     // save message to DB
     await fetch('/api/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: userInfo.id, roomId: currentRoomId, msg: msg })
+        body: JSON.stringify({ userId: userInfo.id, roomId: currentRoomId, msg: msg, time_sent: time_sent})
     })
 }
 
@@ -186,14 +203,14 @@ function logOut() {
 
 // receive message from server
 socket.on('receivedMsg', (data) => {
-    document.querySelector('#msgList').innerHTML += `<li><img src="./assets/avatars/${data.avatar}"  alt="avatar" height="25px" width="25px"/> ${data.displayName}: ${data.msg}</li>`;
+    document.querySelector('#msgList').innerHTML += `<li><img src="./assets/avatars/${data.avatar}"  alt="avatar" height="25px" width="25px"/> ${data.displayName}: ${data.msg} ${data.time_sent}</li>`;
     // scroll to bottom of message box
     document.querySelector('#msgList').scrollTop = document.querySelector('#msgList').scrollHeight;
 })
 
 // receive connected event from server
 socket.on('enteredRoom', (data) => {
-    document.querySelector('#msgList').innerHTML += `<li class="system-msg">User ${data.displayName} has entered the room</li>`;
+    document.querySelector('#msgList').innerHTML += `<li class="system-msg"> ${data.title} ${data.displayName} has entered the room</li>`;
     // scroll to bottom of message box
     document.querySelector('#msgList').scrollTop = document.querySelector('#msgList').scrollHeight;
     userList();
