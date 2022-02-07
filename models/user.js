@@ -2,12 +2,21 @@ const orm = require('../config/orm');
 
 const user = {
     name: 'users',
+    pending: 'pendingUsers',
 
     listAll: async function() {
         const result = await orm.selectAll(this.name);
         return result;
     },
 
+    //User has to fill out forms to login and goes to new table - pendingUser
+    addNewCharacterToPendingUser: async function(loginID, firstName, lastName, displayName, avatarPNG, title) {
+        const vars = '(login_id, first_name, last_name, display_name, avatar_dirct, title)';
+        const data = `(${loginID}, '${firstName}', '${lastName}', '${displayName}', '${avatarPNG}', '${title}')`;
+        await orm.insertOne(this.pending, vars, data);
+    },
+
+    //Wrote To DB
     addNew: async function(loginID, firstName, lastName, displayName, avatarPNG, title) {
         const vars = '(login_id, first_name, last_name, display_name, avatar_dirct, title)';
         const data = `(${loginID}, '${firstName}', '${lastName}', '${displayName}', '${avatarPNG}', '${title}')`;

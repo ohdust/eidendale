@@ -1,5 +1,4 @@
 const orm = require('../config/orm');
-
 const messages = {
     name: 'messages',
 

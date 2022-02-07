@@ -2,6 +2,7 @@ const orm = require('../config/orm');
 
 const login_info = {
     name: 'login_info',
+    pending: 'pending_login_info',
 
     listAll: async function() {
         const result = await orm.selectAll(this.name);
@@ -25,7 +26,7 @@ const login_info = {
     addNew: async function(username, password) {
         const vars = '(user_name, user_password)';
         const data = `('${username}', '${password}')`;
-        await orm.insertOne(this.name, vars, data);
+        await orm.insertOne(this.pending, vars, data);
     },
 
     matchWithUser: async function(username){

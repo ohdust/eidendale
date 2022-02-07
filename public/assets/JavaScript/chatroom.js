@@ -175,7 +175,8 @@ async function sendMsg(e) {
     const currTimestamp = Date.now(), utcDateString = (new Date(currTimestamp)).toUTCString();
 
     const timeForUnix = new Date(utcDateString).getTime();
-    time_sent = timeForUnix;
+    const timeInSeconds = Math.round((timeForUnix / 1000));
+    time_sent = timeInSeconds;
 
     const date = new Date();
     const local = date.toLocaleTimeString();

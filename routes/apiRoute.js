@@ -42,10 +42,16 @@ function routes(app, onlineUsers) {
         const avatar = req.body.avatar;
         console.log(`POST REQUEST: Adding [NEW USER]: username ${username}, firstname: ${firstname}, lastname: ${lastname}, password: ${password}, avatar: ${avatar}`);
         await login.addNew(username, password);
-        const loginID = await login.matchWithUser(username); // find id # of table login_id
+        const loginID = 0; // find id # of table login_id
         console.log('loginid', loginID);
-        await user.addNew(loginID.id, firstname, lastname, username, avatar)
-        res.send({ message: 'Registration successful' });
+
+        //This goes to table for verifying user
+        await user.addNewCharacterToPendingUser(loginID, firstname, lastname, username, avatar)
+        res.send({ message: 'Pre-Registered Complete! We will contact you in regards to your application' });
+
+        //Goes straight to user table - this is suppose to go to previous page
+       // await user.addNew(loginID.id, firstname, lastname, username, avatar)
+       // res.send({ message: 'Registration successful' });
     })
 
     // login request
@@ -96,13 +102,12 @@ function routes(app, onlineUsers) {
         res.send(userInfo);
     })
 
-    // add message to DB
+    //add messages to new table // chat history
     app.post('/api/messages', async (req, res) => {
         console.log(`POST REQUEST: adding message to DB ${req.body}`);
         messages.addMsgToRoom(req.body.userId, req.body.roomId, req.body.msg, req.body.time_sent);
         res.send({ message:'success' });
     })
-
     // add rooms
     app.post('/api/rooms', async (req, res) => {
         console.log(`POST REQUEST: adding room to DB ${req.body}`);

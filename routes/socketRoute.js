@@ -5,13 +5,12 @@ var socketIO = function (io, socket, onlineUsers) {
     onlineUsers.push(data);
   });
 
-
   //inactivity check
   socket.on('inactivity', message => {
     console.log("it begins");
     clearTimeout(socket.inactivityTimeout);
     console.log("We have entered the inactive stage");
-    socket.inactivityTimeout = setTimeout(() => socket.disconnect(true), 8000);
+    socket.inactivityTimeout = setTimeout(() => socket.disconnect(true), 60000);
   });
 
   // join rooms
