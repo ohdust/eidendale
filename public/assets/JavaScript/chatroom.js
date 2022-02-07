@@ -21,7 +21,8 @@ async function checkAccesskey() {
     // grab user info using accessKey
     const accesskey = window.sessionStorage.accesskey;
     // save user info
-    const { id, display_name, avatar_dirct, title } = await fetch(`/api/users/${accesskey}`).then(r => r.json());
+    const  test = { id, display_name, avatar_dirct, title } = await fetch(`/api/users/${accesskey}`).then(r => r.json());
+    console.log(test);
     userInfo.id = id;
     userInfo.displayName = display_name;
     userInfo.avatar = avatar_dirct;
