@@ -7,6 +7,7 @@ const http = require('http').Server(app);
 //const io = require('socket.io')(http);
 
 const io = require('socket.io')(http, {
+    allowEIO3: true,
     cors: {
         origins: "*:*",
         methods: ["GET", "POST"],
@@ -15,6 +16,7 @@ const io = require('socket.io')(http, {
         pingInterval: 3000
     }
 })
+
 // server-side array for keeping track of users in a room
 let userList = [];
 
