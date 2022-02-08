@@ -9,7 +9,7 @@ document.querySelector('#logoutBtn').addEventListener('click', logOut);
 
 // INITIALIZATION OF CHATROOM
 socket.on('connect', () => {
-    checkAccesskey();
+    checkAccesskey().then(socket.emit('connectToServer', userInfo));
     roomList();
 })
 
@@ -21,15 +21,14 @@ async function checkAccesskey() {
     // grab user info using accessKey
     const accesskey = window.sessionStorage.accesskey;
     // save user info
-    const  test = { id, display_name, avatar_dirct, title } = await fetch(`/api/users/${accesskey}`).then(r => r.json());
-    console.log(test);
+    const  { id, display_name, avatar_dirct, title } = await fetch(`/api/users/${accesskey}`).then(r => r.json().toString());
     userInfo.id = id;
     userInfo.displayName = display_name;
     userInfo.avatar = avatar_dirct;
     userInfo.socketId = socket.id;
     userInfo.title = title;
     // send connected status to server
-    socket.emit('connectToServer', userInfo);
+   // socket.emit('connectToServer', userInfo);
 }
 
 async function roomList() {
