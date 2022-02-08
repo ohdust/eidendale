@@ -30,16 +30,16 @@ class Database {
     }
 };
 
-const connectDB = (dbName, dbPassword) => {
-    const db = new Database({
-      host: "localhost",
-      port: 3306,
-      user: "root",
-      password: dbPassword,
-      database: dbName
-    })
-    return db;
-};
+// const connectDB = (dbName, dbPassword) => {
+//     const db = new Database({
+//       host: "localhost",
+//       port: 3306,
+//       user: "root",
+//       password: dbPassword,
+//       database: dbName
+//     })
+//     return db;
+// };
 
 const connectDB = (dbName, dbPassword) => {
     const db = new Database({
