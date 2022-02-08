@@ -9,7 +9,7 @@ document.querySelector('#logoutBtn').addEventListener('click', logOut);
 
 // INITIALIZATION OF CHATROOM
 socket.on('connect', () => {
-    checkAccesskey().then(socket.emit('connectToServer', userInfo));
+    checkAccesskey();
     roomList();
 })
 
@@ -28,7 +28,7 @@ async function checkAccesskey() {
     userInfo.socketId = socket.id;
     userInfo.title = title;
     // send connected status to server
-   // socket.emit('connectToServer', userInfo);
+    socket.emit('connectToServer', userInfo);
 }
 
 async function roomList() {
