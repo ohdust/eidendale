@@ -83,7 +83,7 @@ async function userList() {
     console.log('users:', users);
     // print users to user list
     for (let i = 0; i < users.length; i++) {
-        document.querySelector('#userList').innerHTML += `<li><img src="/assets/avatars/${users[i].avatar}" alt="avatar" height="25px" width="25px"/> ${users[i].displayName}</li>`;
+        document.querySelector('#userList').innerHTML += `<li><img src="${users[i].avatar}" alt="avatar" height="25px" width="25px"/> ${users[i].displayName}</li>`;
         document.querySelector('#sbUserList').innerHTML += `<li>${users[i].displayName}</li>`;
     }
     socket.emit('inactivity');
@@ -98,7 +98,7 @@ async function prevMsgs(roomId) {
         .catch(err => [{ display_name: 'Error', message_body: err }]);
     // print messages
     for (let i = 0; i < prev.length; i++) {
-        document.querySelector('#msgList').innerHTML += `<li><img src="/assets/avatars/${prev[i].avatar_dirct}" alt="avatar" height="25px" width="25px"/> ${prev[i].display_name}: ${prev[i].message_body} ${prev[i].time_sent}</li>`;
+        document.querySelector('#msgList').innerHTML += `<li><img src="${prev[i].avatar_dirct}" alt="avatar" height="25px" width="25px"/> ${prev[i].display_name}: ${prev[i].message_body} ${prev[i].time_sent}</li>`;
     }
     // scroll to bottom of message box
     document.querySelector('#msgList').scrollTop = document.querySelector('#msgList').scrollHeight;
@@ -204,7 +204,7 @@ function logOut() {
 
 // receive message from server
 socket.on('receivedMsg', (data) => {
-    document.querySelector('#msgList').innerHTML += `<li><img src="./assets/avatars/${data.avatar}"  alt="avatar" height="25px" width="25px"/> ${data.displayName}: ${data.msg} ${data.time_sent}</li>`;
+    document.querySelector('#msgList').innerHTML += `<li><img src="${data.avatar}"  alt="avatar" height="25px" width="25px"/> ${data.displayName}: ${data.msg} ${data.time_sent}</li>`;
     // scroll to bottom of message box
     document.querySelector('#msgList').scrollTop = document.querySelector('#msgList').scrollHeight;
 })
