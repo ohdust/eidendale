@@ -4,6 +4,7 @@ let time_sent = null;
 let local_time = null;
 let userInfo = { id: null, displayName: null, avatar: null, roomId: null, socketId: null, title: null };
 
+
 document.querySelector('#msgForm').addEventListener('submit', sendMsg);
 document.querySelector('#logoutBtn').addEventListener('click', logOut);
 
@@ -86,7 +87,7 @@ async function userList() {
         document.querySelector('#userList').innerHTML += `<li><img src="${users[i].avatar}" alt="avatar" height="25px" width="25px"/> ${users[i].displayName}</li>`;
         document.querySelector('#sbUserList').innerHTML += `<li>${users[i].displayName}</li>`;
     }
-    socket.emit('inactivity');
+  //  socket.emit('inactivity');
 }
 
 //loading previous messages
@@ -115,7 +116,7 @@ async function joinRoom(room) {
     // join new room
     socket.emit('join', { roomId: room.id, userId: userInfo.id, socketId: socket.id });
     currentRoomId = room.id;
-    socket.emit('inactivity');
+ //   socket.emit('inactivity');
     // hide room overlay
     hideRoomOverlay();
     // print new room name
@@ -188,6 +189,12 @@ async function sendMsg(e) {
         socket.emit('message', { roomId: currentRoomId, avatar: userInfo.avatar, displayName: userInfo.displayName, msg: msg, time_sent: time_sent});
         document.querySelector('#msg').value = '';
     }
+
+   fs.appendFile('myFile.txt', msg, function (err) {
+        if (err) throw err;
+        console.log('Thanks, It\'s saved to the file!');
+    });
+
     // save message to DB
     await fetch('/api/messages', {
         method: 'POST',

@@ -41,13 +41,27 @@ const user = {
         await orm.updateOne(this.name, change, index);
     },
 
+    //old way to get getUserInfo
+    // getUserInfo: async function(accesskey) {
+    //     const result = await orm.findOne(
+    //         'users LEFT JOIN login_info ON login_info.id = login_id',
+    //         'users.id, users.display_name, users.avatar_dirct, users.title',
+    //         `login_info.user_name = \'${accesskey}\';`
+    //     )
+    //     return result[0];
+    // }
+
+
+    //new way to getUserInfo
     getUserInfo: async function(accesskey) {
-        const result = await orm.findOne(
-            'users LEFT JOIN login_info ON login_info.id = login_id',
-            'users.id, users.display_name, users.avatar_dirct, users.title',
-            `login_info.user_name = \'${accesskey}\';`
-        )
+        const result = await orm.directQuery(`SELECT id, display_name, avatar_dirct, title, login_id FROM users where id = ${accesskey};`);
         return result[0];
+
+        // const result = await orm.directQuery(
+        //     `SELECT messages.room_id, users.avatar_dirct, users.display_name, messages.message_body, messages.time_sent
+        // FROM messages LEFT JOIN users ON users.id = user_id WHERE room_id = ${roomId};`);
+        // return result;
+
     }
 };
 

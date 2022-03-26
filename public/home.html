@@ -1,1 +1,29 @@
 I have successfully logged in! Yay.
+<br>
+Its me: <span id="characterInfo"></span>
+<br>
+<h2>NoticeBoard</h2>
+
+<div id="noticeboard"></div>
+
+<p>Would you like to to <a href="add-topic.html">add a topic</a></p>
+
+<div id="first" class="home-container">
+<label>Title</label>
+<input id="title" type="text" placeholder="title">
+<label>Time Created</label>
+<input id="timeCreated" type="text" placeholder="timeCreated">
+<label>NoticeboardBody</label>
+<input id="noticeboardBody" type="noticeboardBody" placeholder="noticeboardBody">
+<label>Author</label>
+<input id="author" type="author" placeholder="author">
+
+<div id="addNewNoticeBoardPost" class="text-center">
+<button onClick="addNewNoticeBoardPost(event)" type="button" class="btn btn-primary">Submit</button>
+</div>
+</div>
+
+<script src="assets/JavaScript/socket.io.js"></script>
+<script src="assets/JavaScript/home.js"></script>
+
+

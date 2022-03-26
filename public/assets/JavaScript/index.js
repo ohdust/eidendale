@@ -18,12 +18,15 @@ function fetchJSON( url, method='get', data={} ){
 async function login(){
     const apiLogin = {username: usernameInput.value, password: passwordInput.value}
     // const result = { status: "fail", message: "", accesskey:"pass123"}
-    const result = await fetchJSON( `/api/login`, 'post', apiLogin );
+    const result = await fetchJSON( `/api/login`, 'post', apiLogin);
+
     // When server sends back a success message, user will be redirected to the chatroom and given a accesskey
     if (result.code === 202){
         sessionStorage.accesskey = result.accesskey;
+        sessionStorage.setItem("characterID", usernameInput.value);
         console.log('login valid');
         window.location.replace("/home");
+
     }
     // An alert will pop up for 5 seconds if the server sends back a fail match
     else {

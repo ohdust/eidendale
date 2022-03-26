@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS eiden_db;
+DROP DATABASE IF EXISTS eidendale;
 
-CREATE DATABASE eiden_db;
+CREATE DATABASE eidendale;
 
-USE eiden_db;
+USE eidendale;
 
 CREATE TABLE login_info (
   id INTEGER AUTO_INCREMENT NOT NULL,
@@ -100,3 +100,12 @@ CREATE TABLE view_robes (
   color varchar(10) DEFAULT NULL,
   PRIMARY KEY(robeID)
 );
+
+CREATE TABLE noticeboard (
+  noticeboardID int not null primary key auto_increment,
+  title varchar (150),
+  timeCreated VARCHAR(300),
+  noticeboardBody VARCHAR(3000),
+  author varchar (150)
+);
+

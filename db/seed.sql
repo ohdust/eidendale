@@ -41,4 +41,8 @@ INSERT INTO view_avatars (avatarID, avatarLink) VALUES
 (4, 'http://eidendale.co.uk/data/avatar/maggie.png');
 
 INSERT INTO view_profilepics (profileID, profileLink) VALUES
-(5, 'http://eidendale.co.uk/data/profiles/luca.png');
+(6, 'http://eidendale.co.uk/data/profiles/luca.png');
+
+INSERT INTO noticeboard(noticeboardID, title, timeCreated, noticeboardBody, author) VALUES
+(1, 'Hi its Me', '00:00:00', 'Its me, this is my noticeboard body', 'Marie');
+

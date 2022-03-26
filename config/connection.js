@@ -44,9 +44,9 @@ class Database {
 const connectDB = (dbName, dbPassword) => {
     const db = new Database({
       host: "us-cdbr-east-05.cleardb.net",
-      user: "b1af0f7b564f9f",
-      password: "af5e45f0",
-      database: "heroku_1d0b472b7c786fd"
+      user: "bcae4857bd7212",
+      password: "dff053fa",
+      database: "heroku_a93bbf0ab5ae83e"
     })
     return db;
 };

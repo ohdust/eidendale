@@ -4,7 +4,7 @@ const login = require('../models/login_info');
 const user = require('../models/user');
 const messages = require('../models/messages');
 const rooms = require('../models/rooms');
-const moment = require('moment');
+const noticeboard = require('../models/noticeboard');
 
 function routes(app, onlineUsers) {
     // access index
@@ -58,10 +58,10 @@ function routes(app, onlineUsers) {
     app.post('/api/login', async (req, res) => {
         const inputUser = req.body.username;
         const inputPassword = req.body.password;
-        console.log(`GET REQUEST: trying to login as username: ${inputUser}, password: ${inputPassword}`);
         const loginID = await login.getId(inputUser, inputPassword);
-        console.log('response:', loginID);
-        if (loginID) res.send({ code: 202, accesskey:`${inputUser}` });
+        console.log(`GET REQUEST: trying to login as username: ${inputUser}, password: ${inputPassword}`);
+
+       if (loginID) res.send({ code: 202, accesskey:`${loginID.id}` ,  characterID: `${inputUser}`});
         else res.send({ code: 404 });
     })
 
@@ -69,6 +69,13 @@ function routes(app, onlineUsers) {
     app.get('/api/rooms', async (req, res) => {
         console.log('GET REQUEST: fetching rooms information');
         const data = await rooms.listAll();
+        console.table(data);
+        res.status(200).send(data);
+    })
+
+    app.get('/api/noticeboard', async (req, res) => {
+        console.log(`GET REQUEST: fetching noticeboard information`);
+        const data = await noticeboard.showAllNoticeboardPosts();
         console.table(data);
         res.status(200).send(data);
     })
@@ -97,6 +104,7 @@ function routes(app, onlineUsers) {
     app.get('/api/users/:accesskey', async (req, res) => {
         console.log(`GET REQUEST: fetching userinfo using accesskey ${req.params.accesskey}`);
         // find login_id using accesskey
+
         const userInfo = await user.getUserInfo(req.params.accesskey);
         console.table(userInfo);
         res.send(userInfo);
@@ -108,6 +116,24 @@ function routes(app, onlineUsers) {
         messages.addMsgToRoom(req.body.userId, req.body.roomId, req.body.msg, req.body.time_sent);
         res.send({ message:'success' });
     })
+
+    //add new topic to noticeboard
+    app.post('api/noticeboard/add', async (req, res) => {
+        console.log(`POST REQUEST: adding noticeboard post to BOARD ${req.body}`);
+        const title = req.body.title;
+        const timeCreated = req.body.timeCreated;
+        const noticeboardBody = req.body.noticeboardBody;
+        const author = req.body.author;
+
+        console.log(`POST REQUEST: Adding [NEW NOTICEBOARD POST]: title: ${title}, firstname: ${timeCreated}, lastname: ${noticeboardBody}, author: ${author}`);
+
+        await noticeboard.addNoticeboardPost(title, timeCreated, noticeboardBody, author)
+            .then(result => console.log(`NoticeBoard Post: ${req.body} is added to database!`))
+            .catch(error => console.log(error));
+        res.send({ message: 'success' });
+    });
+
+
     // add rooms
     app.post('/api/rooms', async (req, res) => {
         console.log(`POST REQUEST: adding room to DB ${req.body}`);
