@@ -9,7 +9,7 @@ const messages = {
 
     getRoomMsgs: async function(roomId) {
         const result = await orm.directQuery(
-        `SELECT messages.room_id, users.avatar_dirct, users.display_name, messages.message_body, messages.time_sent
+        `SELECT messages.room_id, users.avatar, users.display_name, messages.message_body, messages.time_sent
         FROM messages LEFT JOIN users ON users.id = user_id WHERE room_id = ${roomId};`);
         return result;
     },

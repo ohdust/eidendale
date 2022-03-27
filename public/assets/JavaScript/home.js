@@ -27,7 +27,7 @@ async function checkAccesskey() {
     //fetches character information
     const getCharacterInfo = await fetch(`/api/users/${accesskey}`).then(r => r.json());
     const displayCharacterData = JSON.parse(JSON.stringify(getCharacterInfo));
-    document.querySelector('#characterInfo').innerHTML = displayCharacterData.title + " " + displayCharacterData.display_name;
+    document.querySelector('#characterInfo').innerHTML = displayCharacterData.rank + " " + displayCharacterData.display_name;
 
     //get noticeboard info + print to page
     const fetchNoticeboard = await fetch(`/api/noticeboard`).then(r => r.json());

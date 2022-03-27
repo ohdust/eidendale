@@ -2,7 +2,7 @@ const socket = io();
 let currentRoomId = null;
 let time_sent = null;
 let local_time = null;
-let userInfo = { id: null, displayName: null, avatar: null, roomId: null, socketId: null, title: null };
+let userInfo = { id: null, displayName: null, avatar: null, roomId: null, socketId: null, rank: null };
 
 
 document.querySelector('#msgForm').addEventListener('submit', sendMsg);
@@ -22,12 +22,12 @@ async function checkAccesskey() {
     // grab user info using accessKey
     const accesskey = window.sessionStorage.accesskey;
     // save user info
-    const  { id, display_name, avatar_dirct, title } = await fetch(`/api/users/${accesskey}`).then(r => r.json());
+    const  { id, display_name, avatar, rank } = await fetch(`/api/users/${accesskey}`).then(r => r.json());
     userInfo.id = id;
     userInfo.displayName = display_name;
-    userInfo.avatar = avatar_dirct;
+    userInfo.avatar = avatar;
     userInfo.socketId = socket.id;
-    userInfo.title = title;
+    userInfo.rank = rank;
     // send connected status to server
     socket.emit('connectToServer', userInfo);
 }
@@ -99,7 +99,7 @@ async function prevMsgs(roomId) {
         .catch(err => [{ display_name: 'Error', message_body: err }]);
     // print messages
     for (let i = 0; i < prev.length; i++) {
-        document.querySelector('#msgList').innerHTML += `<li><img src="${prev[i].avatar_dirct}" alt="avatar" height="25px" width="25px"/> ${prev[i].display_name}: ${prev[i].message_body} ${prev[i].time_sent}</li>`;
+        document.querySelector('#msgList').innerHTML += `<li><img src="${prev[i].avatar}" alt="avatar" height="25px" width="25px"/> ${prev[i].display_name}: ${prev[i].message_body} ${prev[i].time_sent}</li>`;
     }
     // scroll to bottom of message box
     document.querySelector('#msgList').scrollTop = document.querySelector('#msgList').scrollHeight;
@@ -218,7 +218,7 @@ socket.on('receivedMsg', (data) => {
 
 // receive connected event from server
 socket.on('enteredRoom', (data) => {
-    document.querySelector('#msgList').innerHTML += `<li class="system-msg"> ${data.title} ${data.displayName} has entered the room</li>`;
+    document.querySelector('#msgList').innerHTML += `<li class="system-msg"> ${data.rank} ${data.displayName} has entered the room</li>`;
     // scroll to bottom of message box
     document.querySelector('#msgList').scrollTop = document.querySelector('#msgList').scrollHeight;
     userList();

@@ -1,6 +1,6 @@
 const orm = require('../config/orm');
 
-//noticeboard is the table
+//noticeboard is a table in the db. This is the functions
 const noticeboard = {
     name: 'noticeboard',
 
