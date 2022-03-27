@@ -1,20 +1,21 @@
 // expressJS implementation
 const express = require('express');
 const app = express();
-const PORT = app.listen(process.env.PORT || 8080);
+const PORT = process.env.PORT || 8080;
 // socketIO implementation
 const http = require('http').Server(app);
-const io = require('socket.io')(http);
-// const io = require('socket.io')(, {
-//     allowEIO3: true,
-//     cors: {
-//         origins: "*:*",
-//         methods: ["GET", "POST"],
-//         allowedHeaders: ["content-type"],
-//         pingTimeout: 7000,
-//         pingInterval: 3000
-//     }
-// })
+//const io = require('socket.io')(http);
+
+const io = require('socket.io')(http, {
+    allowEIO3: true,
+    cors: {
+        origins: "*:*",
+        methods: ["GET", "POST"],
+        allowedHeaders: ["content-type"],
+        pingTimeout: 7000,
+        pingInterval: 3000
+    }
+})
 
 // server-side array for keeping track of users in a room
 let userList = [];
