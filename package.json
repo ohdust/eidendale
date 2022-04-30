@@ -6,8 +6,7 @@
   "scripts": {
     "test": "mocha || exit 0",
     "dev": "nodemon server.js",
-    "start": "node server.js",
-    "heroku-postbuild": "cd public && npm start"
+    "start": "node server.js"
   },
   "engines": {
     "node": "14.17.0",
