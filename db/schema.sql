@@ -3,7 +3,6 @@ CREATE DATABASE eidendale;
 
 USE eidendale;
 
-
 DROP TABLE IF EXISTS `login_info`;
 CREATE TABLE login_info (
   id INTEGER AUTO_INCREMENT NOT NULL,
@@ -84,6 +83,7 @@ CREATE TABLE view_profile (
    description varchar(5000),
    connections varchar(6000),
    color varchar(2000),
+   fullName varchar(1000),
    PRIMARY KEY(profileID)
  );
 

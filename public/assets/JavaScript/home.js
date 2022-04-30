@@ -1,3 +1,8 @@
+const el_title = document.querySelector('#title');
+const el_timeCreated = document.querySelector('#timeCreated');
+const el_noticeboardBody = document.querySelector('#noticeboardBody');
+const el_author = document.querySelector('#author');
+
 const socket = io();
 let noticeboardInfo = { noticeboardInfo: null, timeCreated: null, noticeboardBody: null, author: null };
 
@@ -8,9 +13,9 @@ function fetchJSON( url, method='get', data={} ){
         method,
     }
     if (method === 'post'){
-        users.body = JSON.stringify (data)
+        users.body = JSON.stringify(data);
     }
-    return fetch( url, users).then( res=>res.json() )
+    return fetch( url, users).then( res => res.json())
 }
 
 
@@ -24,7 +29,7 @@ async function checkAccesskey() {
         window.location.replace('/noaccess');
     }
 
-    //fetches character information
+    //fetches users information
     const getCharacterInfo = await fetch(`/api/users/${accesskey}`).then(r => r.json());
     const displayCharacterData = JSON.parse(JSON.stringify(getCharacterInfo));
     document.querySelector('#characterInfo').innerHTML = displayCharacterData.rank + " " + displayCharacterData.display_name;
@@ -48,12 +53,12 @@ async function addNewNoticeBoardPost(event) {
     event.preventDefault();
 
     let addToNoticeBoard = {
-        title: title.value.trim(),
-        timeCreated: timeCreated.value.trim(),
-        noticeboardBody: noticeboardBody.value.trim(),
-        author: author.value.trim(),
+        title: el_title.value.trim(),
+        timeCreated: el_timeCreated.value.trim(),
+        noticeboardBody: el_noticeboardBody.value.trim(),
+        author: el_author.value.trim(),
     };
-    const response = await fetchJSON('api/noticeboard/add', 'post', addToNoticeBoard)
+    const response = await fetchJSON('/api/noticeboard/add', 'post', addToNoticeBoard)
     if (response.message) {
         alert(response.message)
     }

@@ -4,7 +4,6 @@ let time_sent = null;
 let local_time = null;
 let userInfo = { id: null, displayName: null, avatar: null, roomId: null, socketId: null, rank: null };
 
-
 document.querySelector('#msgForm').addEventListener('submit', sendMsg);
 document.querySelector('#logoutBtn').addEventListener('click', logOut);
 
@@ -67,8 +66,7 @@ function triggerModal(id){
 }
 
 function hideMenu(event){
-    console.log(event.target.id)
-
+    console.log(event.target.id);
     if(event.target.id.indexOf('sbRoom') > -1){
         document.querySelector('#mySidepanel').classList.remove('show')
     }
@@ -184,16 +182,13 @@ async function sendMsg(e) {
     local_time = local;
 
     const msg = document.querySelector('#msg').value;
-
     if (msg) {
         socket.emit('message', { roomId: currentRoomId, avatar: userInfo.avatar, displayName: userInfo.displayName, msg: msg, time_sent: time_sent});
         document.querySelector('#msg').value = '';
     }
 
-   fs.appendFile('myFile.txt', msg, function (err) {
-        if (err) throw err;
-        console.log('Thanks, It\'s saved to the file!');
-    });
+    //chat history save or delete from db. right here.
+
 
     // save message to DB
     await fetch('/api/messages', {

@@ -5,6 +5,7 @@ const user = require('../models/user');
 const messages = require('../models/messages');
 const rooms = require('../models/rooms');
 const noticeboard = require('../models/noticeboard');
+const profile = require('../models/profile');
 
 function routes(app, onlineUsers) {
     // access index
@@ -31,6 +32,20 @@ function routes(app, onlineUsers) {
     app.get('/api/avatars', async (req, res) => {
         const avatars = fs.readdirSync('./public/assets/avatars');
         res.status(202).send(avatars);
+    });
+
+    //add new topic to noticeboard
+    app.post('/api/noticeboard/add', async (req, res) => {
+        console.log(`POST REQUEST: adding noticeboard post to BOARD ${req.body}`);
+        const title = req.body.title;
+        const timeCreated = req.body.timeCreated;
+        const noticeboardBody = req.body.noticeboardBody;
+        const author = req.body.author;
+
+        console.log(`POST REQUEST: Adding [NEW NOTICEBOARD POST]: title: ${title}, firstname: ${timeCreated}, lastname: ${noticeboardBody}, author: ${author}`);
+
+        await noticeboard.addNoticeboardPost(title, timeCreated, noticeboardBody, author)
+        res.send({ message: 'success' });
     });
 
     // registration request
@@ -104,10 +119,45 @@ function routes(app, onlineUsers) {
     app.get('/api/users/:accesskey', async (req, res) => {
         console.log(`GET REQUEST: fetching userinfo using accesskey ${req.params.accesskey}`);
         // find login_id using accesskey
-
         const userInfo = await user.getUserInfo(req.params.accesskey);
         console.table(userInfo);
         res.send(userInfo);
+    })
+
+    //request get current users profile information. First start with accesskey. Then will recieve login_id from access key.
+    // This will be the compare between the profileID.
+    app.get('/api/profile/current/:accesskey', async (req, res) => {
+        console.log(`GET REQUEST: fetching users profile using accesskey ${req.params.accesskey}`);
+
+        //fnd login_id using accesskey
+        const userInfoLoginID = await user.getUserInfo(req.params.accesskey);
+        const getUserInfoLoginID = JSON.parse(JSON.stringify(userInfoLoginID));
+
+        //need accesskey to find users Profile
+        const usersProfile = await profile.getCurrentUsersProfile(getUserInfoLoginID.login_id);
+        console.table(usersProfile);
+        res.send(usersProfile);
+    })
+
+    app.get('/api/profile/students', async(req, res) => {
+      const result = await profile.showAllStudents();
+      console.table(result);
+      res.send(result);
+    })
+
+    app.get('/api/profile/aurors', async(req, res) => {
+        const result = await profile.showAllAurors();
+        console.table(result);
+        res.send(result);
+    })
+
+    //this fetches ID based on users firstName and lastName to view profile.
+    app.get('/api/profile/:firstName/:lastName', async(req, res) => {
+        const fn = req.params.firstName;
+        const ln = req.params.lastName;
+        const result = await profile.getCharactersProfileID(fn, ln);
+        console.table(result);
+        res.send(result);
     })
 
     //add messages to new table // chat history
@@ -116,23 +166,6 @@ function routes(app, onlineUsers) {
         messages.addMsgToRoom(req.body.userId, req.body.roomId, req.body.msg, req.body.time_sent);
         res.send({ message:'success' });
     })
-
-    //add new topic to noticeboard
-    app.post('api/noticeboard/add', async (req, res) => {
-        console.log(`POST REQUEST: adding noticeboard post to BOARD ${req.body}`);
-        const title = req.body.title;
-        const timeCreated = req.body.timeCreated;
-        const noticeboardBody = req.body.noticeboardBody;
-        const author = req.body.author;
-
-        console.log(`POST REQUEST: Adding [NEW NOTICEBOARD POST]: title: ${title}, firstname: ${timeCreated}, lastname: ${noticeboardBody}, author: ${author}`);
-
-        await noticeboard.addNoticeboardPost(title, timeCreated, noticeboardBody, author)
-            .then(result => console.log(`NoticeBoard Post: ${req.body} is added to database!`))
-            .catch(error => console.log(error));
-        res.send({ message: 'success' });
-    });
-
 
     // add rooms
     app.post('/api/rooms', async (req, res) => {
